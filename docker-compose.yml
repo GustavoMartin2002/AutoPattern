@@ -19,3 +19,28 @@ services:
       - UVICORN_RELOAD=${UVICORN_RELOAD}
     volumes:
       - ./backend:/app
+      - ./outputs:/app/outputs
+    networks:
+      - autopattern-net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - VITE_HOST=${VITE_HOST:-localhost}
+      - VITE_PORT=${VITE_PORT:-3000}
+      - VITE_APP_URL=${VITE_APP_URL:-http://localhost:3000}
+      - VITE_API_URL=${VITE_API_URL:-http://localhost:8000}
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - autopattern-net
+
+networks:
+  autopattern-net:
+    driver: bridge

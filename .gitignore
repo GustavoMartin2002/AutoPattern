@@ -22,6 +22,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+node_modules/
 
 # Environments
 .env
@@ -35,4 +36,5 @@ venv.bak/
 .pytest_cache/
 
 # Outputs
+outputs/
 backend/outputs/
