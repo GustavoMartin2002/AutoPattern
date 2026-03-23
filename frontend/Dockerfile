@@ -1,8 +1,8 @@
-FROM gmart2002/my-portfolio-frontend:latest
+FROM gmart2002/auto_pattern-frontend:22.22.1
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json ./
 RUN npm install
 
 COPY . .
