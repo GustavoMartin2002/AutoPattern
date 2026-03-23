@@ -52,6 +52,7 @@ export default defineConfig({
       "process.env.VITE_API_URL": JSON.stringify(
         process.env.VITE_API_URL || "http://localhost:8000",
       ),
+      "import.meta.env.PACKAGE_VERSION": JSON.stringify(process.env.npm_package_version),
     },
     resolve: {
       alias: {
