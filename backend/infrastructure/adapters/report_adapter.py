@@ -60,7 +60,7 @@ class ReportAdapter(IReportGenerator):
 
             # Define estilos de formatação
             header_font = Font(name='Calibri', size=12, bold=True, color='FFFFFF')
-            header_fill = PatternFill(start_color='667eea', end_color='667eea', fill_type='solid')
+            header_fill = PatternFill(start_color='2563eb', end_color='2563eb', fill_type='solid')
             center_aligned = Alignment(horizontal='center', vertical='center', wrap_text=False)
             thin_border = Border(
                 left=Side(style='thin'), 
@@ -115,7 +115,7 @@ class ReportAdapter(IReportGenerator):
                 'CustomTitle',
                 parent=styles['Heading1'],
                 fontSize=24,
-                textColor=colors.HexColor('#2c3e50'),
+                textColor=colors.HexColor('#ffffff'),
                 spaceAfter=30,
                 alignment=TA_CENTER
             )
@@ -124,7 +124,7 @@ class ReportAdapter(IReportGenerator):
                 'CustomHeading',
                 parent=styles['Heading2'],
                 fontSize=16,
-                textColor=colors.HexColor('#667eea'),
+                textColor=colors.HexColor('#2563eb'),
                 spaceAfter=12,
                 spaceBefore=20,
             )
@@ -151,7 +151,7 @@ class ReportAdapter(IReportGenerator):
 
             header_table = Table(header_data, colWidths=[16*cm])
             header_table.setStyle(TableStyle([
-                ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor('#667eea')),
+                ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor('#2563eb')),
                 ('TEXTCOLOR', (0, 0), (-1, -1), colors.white),
                 ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
                 ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
@@ -180,7 +180,7 @@ class ReportAdapter(IReportGenerator):
 
             stats_table = Table(stats_data, colWidths=[5.3*cm, 5.3*cm, 5.3*cm])
             stats_table.setStyle(TableStyle([
-                ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#667eea')),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#2563eb')),
                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
                 ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
                 ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
@@ -220,7 +220,7 @@ class ReportAdapter(IReportGenerator):
                         ('RIGHTPADDING', (0, 0), (-1, -1), 15),
                         ('TOPPADDING', (0, 0), (0, 0), 10),
                         ('BOTTOMPADDING', (0, 1), (0, 1), 10),
-                        ('LINEBELOW', (0, 0), (-1, 0), 2, colors.HexColor('#667eea')),
+                        ('LINEBELOW', (0, 0), (-1, 0), 2, colors.HexColor('#2563eb')),
                     ]))
 
                     elementos.append(card_table)

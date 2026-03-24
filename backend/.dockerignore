@@ -1,0 +1,11 @@
+dist
+outputs
+.git
+.gitignore
+*.md
+.vscode
+.idea
+*.log
+coverage
+.env
+.env.local

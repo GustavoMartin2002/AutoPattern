@@ -1,0 +1,60 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36" version="29.6.4">
+  <diagram name="Página-1" id="w2tKka-MzJM_YWWfHoPT">
+    <mxGraphModel dx="983" dy="536" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="y9z2gGAZM_2w4s_5llGK-6" edge="1" parent="1" source="y9z2gGAZM_2w4s_5llGK-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="y9z2gGAZM_2w4s_5llGK-5" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="y9z2gGAZM_2w4s_5llGK-15" edge="1" parent="1" source="y9z2gGAZM_2w4s_5llGK-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="y9z2gGAZM_2w4s_5llGK-16" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="230" y="390.0000000000001" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="y9z2gGAZM_2w4s_5llGK-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="API" vertex="1">
+          <mxGeometry height="60" width="120" x="170" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="y9z2gGAZM_2w4s_5llGK-4" parent="1" style="text;fontStyle=1;fontSize=14;" value="AS DEPENDÊNCIAS SEMPRE APONTAM PARA DENTRO, O DOMÍNIO NUNCA DEPENDE DE FRAMEWORKS OU BIBLIOTECAS EXTERNAS" vertex="1">
+          <mxGeometry height="30" width="920" x="80" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="y9z2gGAZM_2w4s_5llGK-8" edge="1" parent="1" source="y9z2gGAZM_2w4s_5llGK-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="y9z2gGAZM_2w4s_5llGK-7" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="y9z2gGAZM_2w4s_5llGK-19" edge="1" parent="1" source="y9z2gGAZM_2w4s_5llGK-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="y9z2gGAZM_2w4s_5llGK-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="y9z2gGAZM_2w4s_5llGK-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="INFRASTRUCTURE" vertex="1">
+          <mxGeometry height="60" width="120" x="370" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="y9z2gGAZM_2w4s_5llGK-10" edge="1" parent="1" source="y9z2gGAZM_2w4s_5llGK-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="y9z2gGAZM_2w4s_5llGK-9" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="y9z2gGAZM_2w4s_5llGK-22" edge="1" parent="1" source="y9z2gGAZM_2w4s_5llGK-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="y9z2gGAZM_2w4s_5llGK-21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="y9z2gGAZM_2w4s_5llGK-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="APPLICATION" vertex="1">
+          <mxGeometry height="60" width="120" x="570" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="y9z2gGAZM_2w4s_5llGK-24" edge="1" parent="1" source="y9z2gGAZM_2w4s_5llGK-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="y9z2gGAZM_2w4s_5llGK-23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="y9z2gGAZM_2w4s_5llGK-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="DOMAIN" vertex="1">
+          <mxGeometry height="60" width="120" x="770" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="y9z2gGAZM_2w4s_5llGK-16" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;div&gt;- Rotas HTTP/WS;&lt;/div&gt;&lt;div&gt;- Controllers;&lt;/div&gt;&lt;div&gt;- Schemas (validação);&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="130" x="165" y="385" as="geometry" />
+        </mxCell>
+        <mxCell id="y9z2gGAZM_2w4s_5llGK-18" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;div&gt;- Adapters&lt;/div&gt;&lt;div&gt;- Middlewares&lt;/div&gt;&lt;div&gt;- Logging&lt;/div&gt;&lt;div&gt;- Config Server&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="370" y="385" as="geometry" />
+        </mxCell>
+        <mxCell id="y9z2gGAZM_2w4s_5llGK-21" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;div&gt;- Casos de Uso&lt;/div&gt;&lt;div&gt;- Fluxo de Negócio&lt;/div&gt;" vertex="1">
+          <mxGeometry height="35" width="120" x="570" y="385" as="geometry" />
+        </mxCell>
+        <mxCell id="y9z2gGAZM_2w4s_5llGK-23" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;div&gt;- Entidades&lt;/div&gt;&lt;div&gt;- Interfaces (contratos)&lt;/div&gt;&lt;div&gt;- Exceções (erros)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="130" x="765" y="377.5" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
