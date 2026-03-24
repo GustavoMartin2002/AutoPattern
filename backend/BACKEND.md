@@ -7,6 +7,7 @@ backend/
 ├── main.py                  # Ponto de entrada da aplicação
 ├── requirements.txt         # Dependências Python do projeto
 ├── Dockerfile               # Imagem Docker do backend (Python 3.12.12)
+├── .dockerignore            # Arquivos ignorados pelo Docker
 ├── .env.example             # Template de variáveis de ambiente
 ├── pytest.ini               # Configuração do pytest
 │
@@ -67,6 +68,7 @@ backend/
 | `main.py` | Ponto de entrada que instancia o `FastAPIServer` e inicia o Uvicorn na porta configurada (default: `8000`). |
 | `requirements.txt` | Lista de dependências: `fastapi`, `pandas`, `openpyxl`, `reportlab`, `defusedxml`, `websockets`, `pytest`, `httpx`, entre outras. |
 | `Dockerfile` | Baseado na imagem `gmart2002/auto_pattern-backend:3.12.12`. Instala dependências e expõe porta `8000`. |
+| `.dockerignore` | Ignora arquivos e diretórios que não devem ser incluídos na imagem Docker. |
 | `.env.example` | Template com variáveis de ambiente: CORS origins, limites de upload, rate limiting, HSTS, logging e servidor. |
 | `pytest.ini` | Configura `pytest` com modo assíncrono (`asyncio_mode = auto`), markers (`integration`, `slow`), e modo verbose. |
 
