@@ -71,6 +71,7 @@ describe("ApiService", () => {
   });
 
   it("should throw simple HTTP error on failure if JSON is unparseable", async () => {
+    const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
     const mockFileBuffer = new Uint8Array([1, 2, 3]);
 
     mockFetch.mockResolvedValueOnce({
@@ -89,6 +90,8 @@ describe("ApiService", () => {
         exportPath: "",
       }),
     ).rejects.toThrow("Erro HTTP! Status: 500");
+
+    consoleSpy.mockRestore();
   });
 
   it("should catch and rethrow network errors", async () => {
