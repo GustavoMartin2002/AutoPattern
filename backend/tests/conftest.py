@@ -1,13 +1,16 @@
-import pytest
 import os
-import tempfile
 import shutil
-from typing import Dict, Any
+import tempfile
+from typing import Any
+
+import pytest
+
 from core.domain.entities.file import File
 from core.domain.interfaces.notifier import INotifier
 
 # FIXTURES DE XML DE EXEMPLO
 # Estas fixtures fornecem diferentes estruturas XML para testar vários cenários
+
 
 @pytest.fixture
 def simple_xml():
@@ -24,6 +27,7 @@ def simple_xml():
   <AGE>3</AGE>
   <WEIGHT>4.5</WEIGHT>
 </CAT>"""
+
 
 @pytest.fixture
 def repeated_xml():
@@ -48,6 +52,7 @@ def repeated_xml():
     <price>75</price>
   </product>
 </products>"""
+
 
 @pytest.fixture
 def nested_xml():
@@ -80,6 +85,7 @@ def nested_xml():
   </location>
 </company>"""
 
+
 @pytest.fixture
 def empty_tags_xml():
   """
@@ -98,6 +104,7 @@ def empty_tags_xml():
   <field4></field4>
 </data>"""
 
+
 @pytest.fixture
 def invalid_xml():
   """
@@ -112,6 +119,7 @@ def invalid_xml():
   <field2>Value2</field2>
 </data>"""
 
+
 # FIXTURES DE ENTIDADES FILE
 @pytest.fixture
 def create_file_entity():
@@ -124,6 +132,7 @@ def create_file_entity():
   Retorna:
     Função que recebe (xml_content: str, filename: str) e retorna entidade File
   """
+
   def _create(xml_content: str, filename: str = "test.xml"):
     """
     Cria uma entidade File a partir de string XML.
@@ -133,14 +142,16 @@ def create_file_entity():
     Retorna:
       Entidade File pronta para processamento
     """
-    content_bytes = xml_content.encode('utf-8')
+    content_bytes = xml_content.encode("utf-8")
     return File(
       name=filename,
       content=content_bytes,
       size=len(content_bytes),
-      extension="xml"
+      extension="xml",
     )
+
   return _create
+
 
 # FIXTURES DE DIRETÓRIOS TEMPORÁRIOS
 @pytest.fixture
@@ -171,7 +182,9 @@ def temp_output_dir():
   if os.path.exists(temp_dir):
     shutil.rmtree(temp_dir)
 
+
 # ===== MOCK NOTIFIER =====
+
 
 class MockNotifier(INotifier):
   """
@@ -194,12 +207,9 @@ class MockNotifier(INotifier):
       message: Mensagem da notificação
       progress: Valor de progresso (0.0 a 1.0)
     """
-    self.notifications.append({
-      'message': message,
-      'progress': progress
-    })
+    self.notifications.append({"message": message, "progress": progress})
 
-  def get_last_notification(self) -> Dict[str, Any]:
+  def get_last_notification(self) -> dict[str, Any]:
     """
     Retorna a notificação mais recente.
     Útil para verificar estado final nos testes.
@@ -213,6 +223,7 @@ class MockNotifier(INotifier):
     """
     self.notifications.clear()
 
+
 @pytest.fixture
 def mock_notifier():
   """
@@ -221,6 +232,7 @@ def mock_notifier():
   prevenindo que testes interfiram uns com os outros.
   """
   return MockNotifier()
+
 
 # CONFIGURAÇÃO DO PYTEST
 def pytest_configure(config):
@@ -238,6 +250,4 @@ def pytest_configure(config):
     "markers", "integration: marca teste como teste de integração"
   )
   # Registra marcador slow
-  config.addinivalue_line(
-    "markers", "slow: marca teste como execução lenta"
-  )
+  config.addinivalue_line("markers", "slow: marca teste como execução lenta")

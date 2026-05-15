@@ -1,13 +1,19 @@
-from core.domain.interfaces.server import IServer
-from fastapi import FastAPI
-from typing import Callable, Any
+from collections.abc import Callable
+from typing import Any
+
 import uvicorn
+from fastapi import FastAPI
+
+from core.domain.interfaces.server import IServer
+
 
 class FastAPIAdapter(IServer):
   def __init__(self):
     self.app = FastAPI()
 
-  def add_route(self, path: str, method: str, handler: Callable[..., Any], **kwargs: Any) -> None:
+  def add_route(
+    self, path: str, method: str, handler: Callable[..., Any], **kwargs: Any
+  ) -> None:
     """Registra uma nova rota HTTP."""
     self.app.add_api_route(path, handler, methods=[method], **kwargs)
 
@@ -15,7 +21,9 @@ class FastAPIAdapter(IServer):
     """Registra uma nova rota de websocket."""
     self.app.add_websocket_route(path, handler)
 
-  def add_exception_handler(self, exception: type[Exception], handler: Callable[..., Any]) -> None:
+  def add_exception_handler(
+    self, exception: type[Exception], handler: Callable[..., Any]
+  ) -> None:
     """Registra um novo manipulador de exceções."""
     self.app.add_exception_handler(exception, handler)
 

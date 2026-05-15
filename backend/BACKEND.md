@@ -6,7 +6,8 @@ API responsável pelo **processamento de arquivos XML** e geração de **relató
 backend/
 ├── main.py                  # Ponto de entrada da aplicação
 ├── requirements.txt         # Dependências Python do projeto
-├── Dockerfile               # Imagem Docker do backend (Python 3.12.12)
+├── ruff.toml                # Configuração do Ruff (linter + formatter)
+├── Dockerfile               # Imagem Docker do backend (Python 3.12-alpine)
 ├── .dockerignore            # Arquivos ignorados pelo Docker
 ├── .env.example             # Template de variáveis de ambiente
 ├── pytest.ini               # Configuração do pytest
@@ -67,7 +68,8 @@ backend/
 |---------|-----------|
 | `main.py` | Ponto de entrada que instancia o `FastAPIServer` e inicia o Uvicorn na porta configurada (default: `8000`). |
 | `requirements.txt` | Lista de dependências: `fastapi`, `pandas`, `openpyxl`, `reportlab`, `defusedxml`, `websockets`, `pytest`, `httpx`, entre outras. |
-| `Dockerfile` | Baseado na imagem `gmart2002/auto_pattern-backend:3.12.12`. Instala dependências e expõe porta `8000`. |
+| `ruff.toml` | Configuração do Ruff: regras de linting, formatação, target Python 3.12, indent 2, line-length 80. |
+| `Dockerfile` | Baseado na imagem `python:3.12-alpine`. Instala dependências e expõe porta `8000`. |
 | `.dockerignore` | Ignora arquivos e diretórios que não devem ser incluídos na imagem Docker. |
 | `.env.example` | Template com variáveis de ambiente: CORS origins, limites de upload, rate limiting, HSTS, logging e servidor. |
 | `pytest.ini` | Configura `pytest` com modo assíncrono (`asyncio_mode = auto`), markers (`integration`, `slow`), e modo verbose. |
@@ -132,7 +134,7 @@ A rota `POST /api/upload` aceita os seguintes parâmetros via `form-data`:
 ## 🛠️ Tecnologias
 | Categoria | Tecnologia | Versão |
 |-----------|-----------|--------|
-| Linguagem | Python | 3.12.12 |
+| Linguagem | Python | 3.12 |
 | Framework Web | FastAPI | 0.128.0 |
 | multipart/form-data | python-multipart | 0.0.22 |
 | Servidor ASGI | Uvicorn | (via fastapi[standard]) |
@@ -142,6 +144,7 @@ A rota `POST /api/upload` aceita os seguintes parâmetros via `form-data`:
 | Geração de PDF | ReportLab | 4.4.9 |
 | WebSocket | websockets | 16.0.0 |
 | Validação de Dados | Pydantic | (via FastAPI) |
+| Linting + Formatting | Ruff | 0.15.13 |
 | Testes | pytest + pytest-asyncio | 9.0.2 / 1.3.0 |
 | HTTP Client (testes) | httpx | 0.27.0 |
 | Containerização | Docker | - |
@@ -229,7 +232,7 @@ A aplicação implementa controles alinhados às categorias do **OWASP Top 10 (2
 
 ### A06 — Vulnerable and Outdated Components
 - **Dependências fixadas** em `requirements.txt` com versões específicas para reprodutibilidade
-- **Docker base image** controlada (`gmart2002/auto_pattern-backend:3.12.12`)
+- **Docker base image** controlada (`python:3.12-alpine`)
 
 ### A07 — Identification and Authentication Failures
 - **Rate Limiting por IP:** Limite configurável de requisições por minuto (`RATE_LIMIT_PER_MINUTE`)
@@ -248,6 +251,74 @@ A aplicação implementa controles alinhados às categorias do **OWASP Top 10 (2
 
 ### A10 — Server-Side Request Forgery (SSRF)
 - **Parsing local exclusivo:** O backend processa apenas conteúdo XML enviado via upload — não faz requisições externas nem resolve entidades/DTDs remotas (garantido pelo `defusedxml`)
+
+---
+
+## 🧹 Linting & Formatação (Ruff)
+O projeto utiliza o **[Ruff](https://docs.astral.sh/ruff/)** como linter e formatter unificado para Python. A configuração está centralizada em `ruff.toml`.
+
+### Configuração Atual (`ruff.toml`)
+| Opção | Valor | Descrição |
+|-------|-------|-----------|
+| `target-version` | `py312` | Compatibilidade com Python 3.12 |
+| `line-length` | `80` | Largura máxima de linha |
+| `indent-width` | `2` | Indentação com 2 espaços |
+| `quote-style` | `double` | Aspas duplas como padrão |
+| `indent-style` | `space` | Indentação por espaços (não tabs) |
+
+### Regras de Linting Ativas
+| Código | Plugin | O que verifica |
+|--------|--------|-----------|
+| `E`, `W` | pycodestyle | Estilo de código (PEP 8) |
+| `F` | pyflakes | Erros lógicos (variáveis não usadas, imports fantasmas) |
+| `I` | isort | Ordenação de imports |
+| `N` | pep8-naming | Convenção de nomes (classes, funções, variáveis) |
+| `UP` | pyupgrade | Atualiza sintaxe para Python 3.12+ |
+| `B` | flake8-bugbear | Bugs potenciais e bad practices |
+| `C4` | flake8-comprehensions | Otimiza list/dict/set comprehensions |
+| `SIM` | flake8-simplify | Simplificação de código redundante |
+| `RUF` | ruff-specific | Regras exclusivas do Ruff |
+| `ASYNC` | flake8-async | Uso correto de async/await (crucial para FastAPI) |
+
+### Regras Ignoradas
+| Código | Motivo |
+|--------|--------|
+| `E501` | Line-length já é controlada pelo formatter |
+| `E302` | Permite flexibilidade no espaçamento entre classes e funções |
+
+### Comandos
+```bash
+# Verificar erros de linting (sem alterar arquivos)
+ruff check .
+
+# Verificar e corrigir automaticamente o que for possível
+ruff check --fix .
+
+# Verificar formatação (sem alterar arquivos)
+ruff format --check .
+
+# Aplicar formatação automática
+ruff format .
+```
+
+### Workflow Recomendado
+Antes de cada commit, execute ambos os comandos para garantir código limpo:
+```bash
+# 1. Corrige linting (imports, bugs, simplificações)
+ruff check --fix .
+
+# 2. Formata o código (indentação, aspas, trailing commas)
+ruff format .
+
+# 3. Verifica se tudo está limpo (deve retornar sem erros)
+ruff check .
+ruff format --check .
+```
+
+> **Dica:** Se `ruff check --fix` não resolver algum erro, será necessário corrigi-lo manualmente. Erros comuns que exigem correção manual incluem:
+> - **B904:** `raise ... from e` dentro de blocos `except` (encadeamento de exceções)
+> - **F841:** Variáveis atribuídas mas nunca usadas (prefixar com `_`)
+> - **RUF001:** Caracteres Unicode ambíguos em strings
 
 ---
 

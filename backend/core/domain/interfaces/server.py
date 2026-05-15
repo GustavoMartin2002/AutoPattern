@@ -1,9 +1,13 @@
 from abc import ABC, abstractmethod
-from typing import Callable, Any
+from collections.abc import Callable
+from typing import Any
+
 
 class IServer(ABC):
   @abstractmethod
-  def add_route(self, path: str, method: str, handler: Callable[..., Any], **kwargs: Any) -> None:
+  def add_route(
+    self, path: str, method: str, handler: Callable[..., Any], **kwargs: Any
+  ) -> None:
     """Registra uma nova rota."""
     pass
 
@@ -13,7 +17,9 @@ class IServer(ABC):
     pass
 
   @abstractmethod
-  def add_exception_handler(self, exception: type[Exception], handler: Callable[..., Any]) -> None:
+  def add_exception_handler(
+    self, exception: type[Exception], handler: Callable[..., Any]
+  ) -> None:
     """Registra um novo manipulador de exceção."""
     pass
 

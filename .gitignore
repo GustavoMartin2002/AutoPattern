@@ -23,6 +23,8 @@ share/python-wheels/
 *.egg
 MANIFEST
 node_modules/
+logs/
+.ruff_cache/
 
 # Environments
 .env

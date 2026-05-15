@@ -4,9 +4,11 @@ class DomainError(Exception):
   Exceções de domínio representam erros esperados e tratáveis, como validações falhas ou dados não encontrados.
   Diferente de exceções do sistema (IOError, MemoryError, etc), exceções de domínio devem ser capturadas e convertidas em respostas HTTP apropriadas para o usuário.
   """
+
   def __init__(self, message: str):
     self.message = message
     super().__init__(self.message)
+
 
 class InvalidXMLError(DomainError):
   """
@@ -16,7 +18,9 @@ class InvalidXMLError(DomainError):
   - Tags não fechadas
   - Caracteres inválidos
   """
+
   pass
+
 
 class TagsNotFoundError(DomainError):
   """
@@ -25,7 +29,9 @@ class TagsNotFoundError(DomainError):
   - Usuário solicita tag <produto> mas XML só tem <item>
   - XML vazio ou sem dados
   """
+
   pass
+
 
 class InvalidFormatError(DomainError):
   """
@@ -34,7 +40,9 @@ class InvalidFormatError(DomainError):
   - Formato 'doc' solicitado (apenas xlsx e pdf são válidos)
   - Extensão de arquivo incorreta
   """
+
   pass
+
 
 class InvalidPathError(DomainError):
   """
@@ -44,7 +52,9 @@ class InvalidPathError(DomainError):
   - Permissões insuficientes para criar diretório
   - Disco cheio
   """
+
   pass
+
 
 class FileCollisionError(DomainError):
   """
@@ -52,7 +62,9 @@ class FileCollisionError(DomainError):
   Normalmente tratado automaticamente pelo StorageAdapter,
   mas pode falhar em casos extremos (ex: 10.000+ arquivos com mesmo nome).
   """
+
   pass
+
 
 class DataExtractionError(DomainError):
   """
@@ -61,7 +73,9 @@ class DataExtractionError(DomainError):
   - Estrutura XML inesperada
   - Dados corrompidos
   """
+
   pass
+
 
 class ReportGenerationError(DomainError):
   """
@@ -71,7 +85,9 @@ class ReportGenerationError(DomainError):
   - Erro ao renderizar PDF
   - Memória insuficiente para dados grandes
   """
+
   pass
+
 
 class FileSaveError(DomainError):
   """
@@ -81,4 +97,5 @@ class FileSaveError(DomainError):
   - Disco cheio
   - Caminho inválido
   """
+
   pass
