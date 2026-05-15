@@ -1,14 +1,17 @@
-from core.domain.interfaces.notifier import INotifier
-from typing import List
-from fastapi import WebSocket, WebSocketDisconnect
 import logging
+
+from fastapi import WebSocket, WebSocketDisconnect
+
+from core.domain.interfaces.notifier import INotifier
 
 logger = logging.getLogger("AutoPattern")
 
+
 class WebSocketAdapter(INotifier):
   """Adapter para comunicação via WebSocket"""
+
   def __init__(self):
-    self.active_connections: List[WebSocket] = []
+    self.active_connections: list[WebSocket] = []
 
   async def connect(self, websocket: WebSocket):
     """Conecta um novo cliente WebSocket"""

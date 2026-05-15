@@ -1,9 +1,10 @@
-from typing import List, Optional
-from fastapi import UploadFile, Form
+from fastapi import Form, UploadFile
+
+from core.application.use_cases.use_file import UseFile
 from core.domain.entities.file import File
 from core.domain.entities.processing_options import ProcessingOptions
-from core.application.use_cases.use_file import UseFile
 from infrastructure.adapters.input_adapter import InputAdapter
+
 
 class FileController:
   """
@@ -24,9 +25,9 @@ class FileController:
   async def upload(
     self,
     file: UploadFile,
-    tags: List[str] = Form(None),
-    formats: List[str] = Form(None),
-    output_path: str = Form(None)
+    tags: list[str] = Form(None),  # noqa: B008
+    formats: list[str] = Form(None),  # noqa: B008
+    output_path: str = Form(None),
   ):
     """Endpoint HTTP POST /api/upload"""
     # Define formatos padrão se não especificado
@@ -43,14 +44,14 @@ class FileController:
       name=filename,
       content=file_content,
       size=len(file_content),
-      extension=extension
+      extension=extension,
     )
 
     # Converte para entidade de domínio ProcessingOptions
     options = ProcessingOptions(
       tags=InputAdapter.parse_list_from_form(tags),
       formats=InputAdapter.parse_list_from_form(formats),
-      output_path=output_path
+      output_path=output_path,
     )
 
     # Delega processamento para caso de uso

@@ -1,5 +1,6 @@
-from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi import Request
+from starlette.middleware.base import BaseHTTPMiddleware
+
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
   """
@@ -38,6 +39,8 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 
     # HSTS (apenas em produção com HTTPS)
     if self.enable_hsts:
-      response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+      response.headers["Strict-Transport-Security"] = (
+        "max-age=31536000; includeSubDomains"
+      )
 
     return response

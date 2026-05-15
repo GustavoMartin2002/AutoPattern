@@ -1,8 +1,6 @@
-from typing import List, Optional
-
 class InputAdapter:
   @staticmethod
-  def parse_list_from_form(value: List[str]) -> Optional[List[str]]:
+  def parse_list_from_form(value: list[str]) -> list[str] | None:
     """Normaliza uma lista de strings recebida de um formulário/query."""
     if not value:
       return None

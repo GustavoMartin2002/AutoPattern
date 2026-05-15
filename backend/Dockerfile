@@ -1,4 +1,4 @@
-FROM gmart2002/auto_pattern-backend:3.12.12
+FROM python:3.12-alpine
 
 WORKDIR /app
 

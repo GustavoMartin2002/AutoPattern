@@ -1,6 +1,7 @@
 import logging
-from infrastructure.server_config import FastAPIServer
 import os
+
+from infrastructure.server_config import FastAPIServer
 
 logging.basicConfig(
   level=logging.INFO,

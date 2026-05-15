@@ -1,8 +1,9 @@
-from fastapi import Request, HTTPException, status
+import time
+
+from fastapi import Request, status
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
-from typing import Dict
-import time
+
 
 class SecurityMiddleware(BaseHTTPMiddleware):
   """
@@ -13,11 +14,13 @@ class SecurityMiddleware(BaseHTTPMiddleware):
   - Validação de content-type
   """
 
-  def __init__(self, app, max_file_size_mb: int = 10, rate_limit_per_minute: int = 10):
+  def __init__(
+    self, app, max_file_size_mb: int = 10, rate_limit_per_minute: int = 10
+  ):
     super().__init__(app)
     self.max_file_size_bytes = max_file_size_mb * 1024 * 1024
     self.rate_limit = rate_limit_per_minute
-    self.request_history: Dict[str, list] = {}
+    self.request_history: dict[str, list] = {}
 
   async def dispatch(self, request: Request, call_next):
     # Rate limiting check
@@ -26,7 +29,9 @@ class SecurityMiddleware(BaseHTTPMiddleware):
     if not self._check_rate_limit(client_ip):
       return JSONResponse(
         status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-        content={"message": "Taxa de requisições excedida. Tente novamente em 1 minuto."}
+        content={
+          "message": "Taxa de requisições excedida. Tente novamente em 1 minuto."
+        },
       )
 
     # File size validation for upload endpoints
@@ -35,7 +40,9 @@ class SecurityMiddleware(BaseHTTPMiddleware):
       if content_length and int(content_length) > self.max_file_size_bytes:
         return JSONResponse(
           status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
-          content={"message": f"Arquivo muito grande. Tamanho máximo: {self.max_file_size_bytes // (1024*1024)}MB"}
+          content={
+            "message": f"Arquivo muito grande. Tamanho máximo: {self.max_file_size_bytes // (1024 * 1024)}MB"
+          },
         )
 
     response = await call_next(request)
@@ -54,7 +61,8 @@ class SecurityMiddleware(BaseHTTPMiddleware):
 
     # Remove requisições antigas (mais de 1 minuto)
     self.request_history[ip] = [
-      timestamp for timestamp in self.request_history[ip]
+      timestamp
+      for timestamp in self.request_history[ip]
       if current_time - timestamp < 60
     ]
 
