@@ -24,6 +24,7 @@ share/python-wheels/
 MANIFEST
 node_modules/
 logs/
+*.log
 .ruff_cache/
 
 # Environments
