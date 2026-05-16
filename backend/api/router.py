@@ -20,7 +20,6 @@ Padrão: Router Configuration (Clean Architecture)
 file_controller = FileController(get_use_file())
 websocket_controller = WebSocketController(get_websocket_adapter())
 
-
 def setup_routes(app: FastAPIAdapter):
   """Registra todas as rotas da aplicação no FastAPI."""
   # Rota HTTP para upload de arquivos

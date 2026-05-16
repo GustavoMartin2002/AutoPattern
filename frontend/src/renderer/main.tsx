@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-
 import Home from "./src/presentation/pages/Home";
 import "./src/presentation/styles/global.css";
 

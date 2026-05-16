@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 
-
 class INotifier(ABC):
   @abstractmethod
   async def notify(self, message: str, progress: float) -> dict[str, float]:
