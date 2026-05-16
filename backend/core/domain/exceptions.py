@@ -4,9 +4,11 @@ class DomainError(Exception):
   Exceções de domínio representam erros esperados e tratáveis, como validações falhas ou dados não encontrados.
   Diferente de exceções do sistema (IOError, MemoryError, etc), exceções de domínio devem ser capturadas e convertidas em respostas HTTP apropriadas para o usuário.
   """
+
   def __init__(self, message: str):
     self.message = message
     super().__init__(self.message)
+
 
 class InvalidXMLError(DomainError):
   """
