@@ -1,4 +1,4 @@
-FROM gmart2002/auto_pattern-frontend:22.22.1
+FROM node:22-alpine
 
 WORKDIR /app
 

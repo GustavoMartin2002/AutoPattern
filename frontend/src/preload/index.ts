@@ -1,5 +1,5 @@
-import { contextBridge, ipcRenderer } from "electron";
 import { electronAPI } from "@electron-toolkit/preload";
+import { contextBridge, ipcRenderer } from "electron";
 
 export interface ElectronAPI {
   openFile: () => Promise<string | null>;
@@ -29,13 +29,13 @@ if (process.contextIsolated) {
     console.error(error);
   }
 } else {
-  // @ts-ignore (define in dts)
   window.electron = {
     ...electronAPI,
     openFile: api.openFile,
     openDirectory: api.openDirectory,
     readFile: api.readFile,
   };
-  // @ts-ignore (define in dts)
+
+  // @ts-expect-error (api is defined in renderer env.d.ts, not available in node tsconfig)
   window.api = api;
 }

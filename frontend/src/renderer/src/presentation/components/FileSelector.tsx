@@ -1,5 +1,7 @@
-import React, { useRef } from "react";
-import FileSelectorProps from "@renderer/interfaces/FileSelectorProps";
+import { useRef } from "react";
+
+import type FileSelectorProps from "@renderer/interfaces/FileSelectorProps";
+import type React from "react";
 
 // Componente responsável pela seleção de arquivos XML
 const FileSelector: React.FC<FileSelectorProps> = ({

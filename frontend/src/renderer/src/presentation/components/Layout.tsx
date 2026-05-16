@@ -1,6 +1,6 @@
-import React from "react";
+import type React from "react";
 
-const appVersion = import.meta.env.PACKAGE_VERSION;
+const appVersion = import.meta.env.PACKAGE_VERSION as string | undefined;
 
 // Componente responsável por definir o layout da aplicação
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -22,7 +22,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </main>
 
         <footer className="px-4 sm:px-8 xl:px-20 py-6 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row gap-4 justify-between sm:items-center text-slate-500 dark:text-slate-500 text-xs font-medium">
-          <span className="text-primary font-bold select-none">BETA {`${appVersion}`}</span>
+          <span className="text-primary font-bold select-none">
+            BETA {`${appVersion}`}
+          </span>
           <div className="flex gap-4">
             <a
               href="https://github.com/GustavoMartin2002/AutoPattern/issues"

@@ -1,5 +1,5 @@
-import React from "react";
-import ProgressPanelProps from "@renderer/interfaces/ProgressPanelProps";
+import type ProgressPanelProps from "@renderer/interfaces/ProgressPanelProps";
+import type React from "react";
 
 // Componente responsável por gerenciar o progresso e a execução
 const ProgressPanel: React.FC<ProgressPanelProps> = ({
@@ -19,11 +19,11 @@ const ProgressPanel: React.FC<ProgressPanelProps> = ({
           disabled={isProcessing}
           className={`
             w-full h-16 text-primary uppercase font-black text-xl rounded-lg transition-all transform flex items-center justify-center gap-2 shadow-lg select-none cursor-pointer tracking-wider
-            ${isProcessing
-              ? "bg-slate-300 cursor-not-allowed opacity-80"
-              : "bg-white hover:scale-[1.03] active:scale-95"
-            }`
-          }
+            ${
+              isProcessing
+                ? "bg-slate-300 cursor-not-allowed opacity-80"
+                : "bg-white hover:scale-[1.03] active:scale-95"
+            }`}
         >
           {isProcessing ? "PROCESSANDO..." : "GERAR AUTOMAÇÃO"}
         </button>
@@ -45,7 +45,7 @@ const ProgressPanel: React.FC<ProgressPanelProps> = ({
             <div
               className="bg-white h-3 rounded-full transition-all duration-500"
               style={{ width: `${progress}%` }}
-            ></div>
+            />
           </div>
         </div>
       </div>

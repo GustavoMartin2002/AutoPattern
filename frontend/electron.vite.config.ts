@@ -1,6 +1,7 @@
-import { defineConfig } from "electron-vite";
 import { resolve } from "path";
+
 import react from "@vitejs/plugin-react";
+import { defineConfig } from "electron-vite";
 
 export default defineConfig({
   main: {
@@ -52,7 +53,9 @@ export default defineConfig({
       "process.env.VITE_API_URL": JSON.stringify(
         process.env.VITE_API_URL || "http://localhost:8000",
       ),
-      "import.meta.env.PACKAGE_VERSION": JSON.stringify(process.env.npm_package_version),
+      "import.meta.env.PACKAGE_VERSION": JSON.stringify(
+        process.env.npm_package_version,
+      ),
     },
     resolve: {
       alias: {

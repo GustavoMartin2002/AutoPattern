@@ -20,10 +20,12 @@ frontend/
 ├── .dockerignore             # Arquivos e pastas a serem ignorados no build do Docker
 ├── .env                      # Variáveis de ambiente locais (não versionado)
 ├── .env.example              # Template genérico de variáveis de ambiente
+├── .prettierignore           # Arquivos e pastas ignorados pelo formatador Prettier
 ├── Dockerfile                # Instruções de montagem da imagem Docker
 ├── FRONTEND.md               # Documentação oficial do FrontEnd
 ├── electron-builder.yml      # Configuração de bundler para gerar os executáveis OS
 ├── electron.vite.config.ts   # Configuração de build para Electron separado por processos
+├── eslint.config.mts         # Configuração Flat Config do ESLint (zonas por contexto)
 ├── jest.config.mjs           # Configuração base da suíte de teste Jest
 ├── jest.setup.ts             # Arquivo de inicialização e custommatchers do Jest (RTL)
 ├── package-lock.json         # Árvore exata de dependências travadas pelo NPM
@@ -43,10 +45,12 @@ frontend/
 |---------|-----------|
 | `.dockerignore` | Especifica quais pastas (ex: `node_modules`) o Docker deve ignorar durante o estágio de `COPY`. |
 | `.env` / `.env.example` | Gerenciamento de variáveis locais como `VITE_API_URL`, portas e configurações em tempo de execução. |
+| `.prettierignore` | Define quais arquivos e pastas o Prettier deve ignorar durante a formatação (ex: `dist/`, `*.md`, `*.lock`). |
 | `Dockerfile` | Define a imagem conteinerizada do Frontend baseada em Node Alpine, isolando dependências do OS para evitar problemas (`rollup-linux` issues). |
 | `FRONTEND.md` | Documentação arquitetural principal mantendo as documentações de pastas consistentes. |
 | `electron-builder.yml` | Orquestra e define tags exclusivas para a compilação de binários nativos de Desktop (`.exe`, `.dmg`). |
 | `electron.vite.config.ts` | Configura o compilador Vite nativo do ecossistema do Electron dividindo perfeitamente as instâncias em Main, Preload e Renderer. |
+| `eslint.config.mts` | Flat Config do ESLint com 7 zonas contextuais (Renderer, Main/Preload, Node.js), habilitando `strictTypeChecked` e `stylisticTypeChecked`. |
 | `jest.config.mjs` | Configurações centrais e simulação de Browser (`jsdom`) possibilitando a ação e testagem dos DOM Elements. |
 | `jest.setup.ts` | Injeção global para disponibilizar matchers extras do Testing Library (ex: `toBeInTheDocument`). |
 | `package.json` | O manifest oficial da aplicação que registra informações de build, metadados as dependências exatas injetáveis. |
@@ -73,15 +77,16 @@ A aplicação foi projetada mantendo componentes enxutos com responsabilidades d
 ## 🛠️ Tecnologias
 | Categoria | Tecnologia | Versão |
 |-------------------------|---------------------|---------------------|
-| Runtime Server          | Node | 22.22.1 |
+| Runtime Server          | Node | 22 |
 | Linguagem/Tipagem       | TypeScript | ^5.9.3 |
 | Tooling                 | Electron-Vite | 5.0.0 |
 | Renderização            | React | ^19.2.1 |
 | Estilização             | TailwindCSS | ^3.4.1 |
-| Automação               | PostCSS e Autoprefixer | ^8.4.35 / ^10.4.17 |
+| Automação               | PostCSS e Autoprefixer | ^8.5.10 / ^10.4.17 |
 | Testes                  | Jest | ^29.7.0 |
 | Asseguração da DOM      | Testing-Library | ^10.4.1 |
-| Code formatters         | Prettier e ESLint | ^3.7.4 / ^9.39.1 |
+| Code Quality            | ESLint (Flat Config) | ^9.39.4 |
+| Formatação              | Prettier | ^3.7.4 |
 | Containerização         | Docker | - |
 
 ---
@@ -135,6 +140,67 @@ A aplicação Desktop evita o risco XSS/RCE, implementando diretrizes rigorosas 
 
 ---
 
+## ✅ Qualidade de Código
+O projeto implementa uma esteira rigorosa de qualidade automatizada, composta por três pilares que trabalham de forma complementar e podem ser executados individualmente ou consolidados via `npm run validate`.
+
+### ESLint (Análise Estática)
+Configurado via **Flat Config** (`eslint.config.mts`) com `typescript-eslint` no modo `strictTypeChecked` + `stylisticTypeChecked`, dividido em **7 zonas contextuais** que isolam regras por ambiente:
+
+| Zona | Escopo | Descrição |
+|------|--------|-----------|
+| 1. Ignorados Globais | `dist/`, `out/`, `node_modules/` | Diretórios excluídos da análise. |
+| 2. Base JS | Todos os arquivos | Regras recomendadas do ECMAScript padrão. |
+| 3. TypeScript Estrito | `*.ts`, `*.tsx` | `strictTypeChecked` + `stylisticTypeChecked` com `projectService`. |
+| 4. React (Renderer) | `src/renderer/**` | Plugins `react`, `react-hooks` e `react-refresh` para Fast Refresh. |
+| 5. Node.js (Main/Preload) | `src/main/**`, `src/preload/**` | Globals Node.js, permite `require()` no processo principal. |
+| 6. Configuração | `*.config.*`, `jest.*`, `tests/` | Desabilita type-check rígido em arquivos de configuração e testes. |
+| 7. Importações | `**/*.{ts,tsx,mts}` | Ordenação automática via `import-x/order` com grupos e linhas em branco. |
+
+**Regras personalizadas notáveis:**
+- `consistent-type-imports`: Força `import type` para importações exclusivas de tipos.
+- `no-misused-promises`: Previne Promises flutuantes (exceto em atributos JSX).
+- `no-unused-vars`: Ignora variáveis prefixadas com `_` (padrão para parâmetros intencionalmente não utilizados).
+
+```bash
+npm run lint          # Análise estrita
+npm run lint:fix      # Correção automática dos erros corrigíveis
+```
+
+### TypeCheck (Verificação de Tipos)
+O projeto utiliza **dois projetos TypeScript complementares**, garantindo que cada contexto de execução seja verificado com as tipagens corretas:
+
+| Projeto | Arquivo | Contexto |
+|---------|---------|----------|
+| Node.js | `tsconfig.node.json` | Processo Main, Preload, configs de build e Jest setup. |
+| Web | `tsconfig.web.json` | Processo Renderer (React), componentes, hooks, serviços e testes. |
+
+Ambos estendem a base `@electron-toolkit/tsconfig` e utilizam `composite: true` para otimizar builds incrementais. O ESLint se integra automaticamente via `projectService` para garantir que as regras type-aware funcionem sem conflito.
+
+```bash
+npm run typecheck         # Executa ambos os projetos em sequência
+npm run typecheck:node    # Apenas o contexto Node.js
+npm run typecheck:web     # Apenas o contexto Web/React
+```
+
+### Prettier (Formatação)
+O Prettier garante formatação consistente em todo o código-fonte. O arquivo `.prettierignore` exclui artefatos de build, lockfiles, documentação Markdown e arquivos de configuração estática da formatação automática.
+
+```bash
+npm run format            # Aplica formatação em todos os arquivos
+npm run format:check      # Verifica sem modificar (ideal para CI/CD)
+```
+
+### Validação Consolidada
+O script `validate` executa **todos os pilares em sequência** e falha imediatamente ao primeiro erro detectado, sendo ideal para pipelines de CI/CD e hooks de pré-commit:
+
+```bash
+npm run validate          # typecheck → lint → format:check
+```
+
+Recomenda-se utilizar o comando `npm run validate` sempre antes de commitar, a fim de checar qualidade do código e manter padrão consistente.
+
+---
+
 ## 🧪 Testes
 Mantendo a integridade, os testes validam arquivos em services, cobrindo validações de erro e caminhos de sucesso do usuário implementados com `jest`:
 
@@ -147,10 +213,17 @@ npm run test:watch    # Ativar modo observação iterativa
 
 ## ⚡ Quick Start
 ### Com Docker
-O container Docker do frontend pode ser utilizado no ambiente de desenvolvimento se espelhando em rede com o backend.
+O container Docker do frontend pode ser utilizado no ambiente de desenvolvimento se espelhando em rede com o backend. A imagem é baseada em **Node 22 Alpine** e executa o servidor Vite em modo web (`dev:web`).
+
+> **Nota sobre `npm install` vs `npm ci`:** O projeto utiliza `npm install` no Docker intencionalmente. Como o `package-lock.json` é gerado em um host Windows e o container executa em Linux Alpine, dependências opcionais nativas do Electron (ex: `electron-builder-squirrel-windows`) geram conflitos de plataforma que impedem o `npm ci` de resolver a árvore de dependências corretamente. O `npm install` recalcula a árvore no contexto do container, ignorando binários exclusivos do Windows.
+
 ```bash
+# Build e execução isolada
 docker build -t autopattern-frontend .
 docker run -p 3000:3000 --env-file .env autopattern-frontend
+
+# Ou build completo em conjunto com o backend (Full Stack)
+docker compose up --build
 ```
 
 ### Sem Docker (Local)

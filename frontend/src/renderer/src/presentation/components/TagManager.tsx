@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import TagManagerProps from "@renderer/interfaces/TagManagerProps";
+import { useState } from "react";
+
+import type TagManagerProps from "@renderer/interfaces/TagManagerProps";
+import type React from "react";
 
 // Componente responsável por gerenciar as tags XML
 const TagManager: React.FC<TagManagerProps> = ({
@@ -51,33 +53,38 @@ const TagManager: React.FC<TagManagerProps> = ({
           <input
             type="text"
             value={newTag}
-            onChange={(e) => setNewTag(e.target.value)}
+            onChange={(e) => {
+              setNewTag(e.target.value);
+            }}
             onKeyDown={handleKeyDown}
-            disabled={(tags || []).length >= 30}
-            placeholder={(tags || []).length >= 30
-              ? "Limite máximo de tags (30) atingido"
-              : "Ex: Código, Nome, Valor..."
+            disabled={(tags ?? []).length >= 30}
+            placeholder={
+              (tags ?? []).length >= 30
+                ? "Limite máximo de tags (30) atingido"
+                : "Ex: Código, Nome, Valor..."
             }
             className="flex-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all select-none disabled:opacity-50 disabled:cursor-not-allowed"
           />
           <button
             onClick={handleAdd}
-            disabled={(tags || []).length >= 30}
+            disabled={(tags ?? []).length >= 30}
             className="flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 dark:bg-primary text-primary dark:text-white hover:bg-primary/20 hover:scale-105 active:scale-95 transition-all border border-primary/20 dark:border-primary focus-visible:ring-2 focus-visible:ring-primary outline-none text-base select-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
             +
           </button>
         </div>
         <div className="flex flex-wrap gap-2 mt-2">
-          {(tags || []).map((tag) => (
+          {(tags ?? []).map((tag) => (
             <span
               key={tag}
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-primary/50 text-slate-700 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-primary select-none"
             >
-              {tag || null}
+              {tag}
               <span
                 className="text-[14px] text-slate-700 dark:text-slate-300 opacity-60 cursor-pointer hover:opacity-100 select-none"
-                onClick={() => onRemoveTag(tag)}
+                onClick={() => {
+                  onRemoveTag(tag);
+                }}
               >
                 X
               </span>

@@ -40,3 +40,7 @@ venv.bak/
 # Outputs
 outputs/
 backend/outputs/
+
+# Lint & Build caches
+.eslintcache
+*.tsbuildinfo

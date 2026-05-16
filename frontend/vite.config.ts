@@ -1,6 +1,7 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
 import { resolve } from "path";
+
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 
 export default defineConfig({
   root: resolve(__dirname, "src/renderer"),
@@ -29,6 +30,8 @@ export default defineConfig({
     "process.env.VITE_API_URL": JSON.stringify(
       process.env.VITE_API_URL || "http://localhost:8000",
     ),
-    'import.meta.env.PACKAGE_VERSION': JSON.stringify(process.env.npm_package_version),
+    "import.meta.env.PACKAGE_VERSION": JSON.stringify(
+      process.env.npm_package_version,
+    ),
   },
 });

@@ -1,6 +1,8 @@
-import { ApiService } from "../services/ApiService";
-import ProcessOptions from "../interfaces/ProcessOptions";
 import { describe, it, expect, beforeEach, jest } from "@jest/globals";
+
+import { uploadAndProcess, connectWebSocket } from "../services/ApiService";
+
+import type ProcessOptions from "../interfaces/ProcessOptions";
 
 // Inicializa o mock do fetch nativo no escopo global para interceptação dos testes
 const mockFetch = jest.fn<typeof fetch>();
@@ -33,7 +35,7 @@ describe("ApiService", () => {
       json: async () => mockResponse,
     } as unknown as Response);
 
-    const result = await ApiService.uploadAndProcess(
+    const result = await uploadAndProcess(
       mockFileBuffer,
       mockFileName,
       mockOptions,
@@ -61,7 +63,7 @@ describe("ApiService", () => {
     } as unknown as Response);
 
     await expect(
-      ApiService.uploadAndProcess(mockFileBuffer, "test.xml", {
+      uploadAndProcess(mockFileBuffer, "test.xml", {
         tags: null,
         exportExcel: false,
         exportPdf: false,
@@ -71,7 +73,9 @@ describe("ApiService", () => {
   });
 
   it("should throw simple HTTP error on failure if JSON is unparseable", async () => {
-    const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    const consoleSpy = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
     const mockFileBuffer = new Uint8Array([1, 2, 3]);
 
     mockFetch.mockResolvedValueOnce({
@@ -83,7 +87,7 @@ describe("ApiService", () => {
     } as unknown as Response);
 
     await expect(
-      ApiService.uploadAndProcess(mockFileBuffer, "test.xml", {
+      uploadAndProcess(mockFileBuffer, "test.xml", {
         tags: null,
         exportExcel: false,
         exportPdf: false,
@@ -100,7 +104,7 @@ describe("ApiService", () => {
     mockFetch.mockRejectedValueOnce(new Error("Network Error"));
 
     await expect(
-      ApiService.uploadAndProcess(mockFileBuffer, "test.xml", {
+      uploadAndProcess(mockFileBuffer, "test.xml", {
         tags: null,
         exportExcel: false,
         exportPdf: false,
@@ -126,9 +130,7 @@ describe("ApiService - WebSocket", () => {
   it("connects to websocket and triggers callback on message", () => {
     const mockCallback = jest.fn();
 
-    const ws = ApiService.connectWebSocket(
-      mockCallback,
-    ) as unknown as MockWebSocket;
+    const ws = connectWebSocket(mockCallback) as unknown as MockWebSocket;
     expect(ws.url).toContain("/api/ws");
 
     if (ws.onmessage) {

@@ -1,11 +1,12 @@
-import React from "react";
-import Layout from "../components/Layout";
-import FileSelector from "../components/FileSelector";
-import TagManager from "../components/TagManager";
 import ExportOptions from "../components/ExportOptions";
-import ProgressPanel from "../components/ProgressPanel";
+import FileSelector from "../components/FileSelector";
+import Layout from "../components/Layout";
 import LogConsole from "../components/LogConsole";
+import ProgressPanel from "../components/ProgressPanel";
+import TagManager from "../components/TagManager";
 import { useProcessFile } from "../hooks/useProcessFile";
+
+import type React from "react";
 
 // Componente principal que orquestra a interface do usuário
 const Home: React.FC = () => {
@@ -31,7 +32,8 @@ const Home: React.FC = () => {
     <Layout>
       <div className="flex flex-col gap-2">
         <h2 className="text-slate-500 dark:text-slate-400 text-start text-2xl">
-          Configure o processamento de dados XML e exporte para múltiplos formatos
+          Configure o processamento de dados XML e exporte para múltiplos
+          formatos
         </h2>
       </div>
 
@@ -42,12 +44,12 @@ const Home: React.FC = () => {
 
           <TagManager
             tags={tags}
-            onAddTag={(tag) =>
-              setTags((prev) => (prev.includes(tag) ? prev : [...prev, tag]))
-            }
-            onRemoveTag={(t) =>
-              setTags((prev) => prev.filter((tag) => tag !== t))
-            }
+            onAddTag={(tag) => {
+              setTags((prev) => (prev.includes(tag) ? prev : [...prev, tag]));
+            }}
+            onRemoveTag={(t) => {
+              setTags((prev) => prev.filter((tag) => tag !== t));
+            }}
           />
         </div>
 
@@ -57,8 +59,12 @@ const Home: React.FC = () => {
             exportExcel={exportExcel}
             exportPdf={exportPdf}
             exportPath={exportPath}
-            onToggleExcel={() => setExportExcel(!exportExcel)}
-            onTogglePdf={() => setExportPdf(!exportPdf)}
+            onToggleExcel={() => {
+              setExportExcel(!exportExcel);
+            }}
+            onTogglePdf={() => {
+              setExportPdf(!exportPdf);
+            }}
             onSelectPath={handleSelectExportPath}
           />
 

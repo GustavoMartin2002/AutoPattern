@@ -1,7 +1,8 @@
-import { app, shell, BrowserWindow, ipcMain, dialog } from "electron";
-import { electronApp, optimizer, is } from "@electron-toolkit/utils";
-import { join } from "path";
 import * as fs from "fs";
+import { join } from "path";
+
+import { electronApp, optimizer, is } from "@electron-toolkit/utils";
+import { app, shell, BrowserWindow, ipcMain, dialog } from "electron";
 
 function createWindow(): void {
   // Cria a janela do Software.
@@ -26,22 +27,22 @@ function createWindow(): void {
   });
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url);
+    void shell.openExternal(details.url);
     return { action: "deny" };
   });
 
   // HMR (Hot Module Replacement) para o renderer baseado no cli do electron-vite.
   // Carrega a URL remota para desenvolvimento ou o arquivo html local para produção.
-  if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
-    mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"]);
+  if (is.dev && process.env.ELECTRON_RENDERER_URL) {
+    void mainWindow.loadURL(process.env.ELECTRON_RENDERER_URL);
   } else {
-    mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
+    void mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
   }
 }
 
 // Este método será chamado quando o Electron terminar de inicializar e estiver pronto para criar janelas do navegador.
 // Algumas APIs só podem ser usadas após este evento ocorrer.
-app.whenReady().then(() => {
+void app.whenReady().then(() => {
   // Define o id do modelo de usuário do app para janelas
   electronApp.setAppUserModelId("com.autopattern");
 
@@ -54,7 +55,8 @@ app.whenReady().then(() => {
   ipcMain.handle("dialog:openFile", async (event) => {
     const webContents = event.sender;
     const win = BrowserWindow.fromWebContents(webContents);
-    const { canceled, filePaths } = await dialog.showOpenDialog(win!, {
+    if (!win) return null;
+    const { canceled, filePaths } = await dialog.showOpenDialog(win, {
       properties: ["openFile"],
       filters: [{ name: "XML Files", extensions: ["xml"] }],
     });
@@ -67,7 +69,8 @@ app.whenReady().then(() => {
   ipcMain.handle("dialog:openDirectory", async (event) => {
     const webContents = event.sender;
     const win = BrowserWindow.fromWebContents(webContents);
-    const { canceled, filePaths } = await dialog.showOpenDialog(win!, {
+    if (!win) return null;
+    const { canceled, filePaths } = await dialog.showOpenDialog(win, {
       properties: ["openDirectory"],
     });
     if (!canceled) {
@@ -76,7 +79,7 @@ app.whenReady().then(() => {
     return null;
   });
 
-  ipcMain.handle("file:read", async (_event, filePath: string) => {
+  ipcMain.handle("file:read", (_event, filePath: string) => {
     try {
       const fileBuffer = fs.readFileSync(filePath);
       return fileBuffer;

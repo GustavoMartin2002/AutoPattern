@@ -1,5 +1,5 @@
-import React from "react";
-import ExportOptionsProps from "@renderer/interfaces/ExportOptionsProps";
+import type ExportOptionsProps from "@renderer/interfaces/ExportOptionsProps";
+import type React from "react";
 
 // Componente responsável por gerenciar as opções de exportação
 const ExportOptions: React.FC<ExportOptionsProps> = ({
@@ -68,13 +68,20 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({
           <input
             type="text"
             readOnly
-            value={isElectron ? exportPath : `Pasta "outputs" na raiz do projeto`}
-            placeholder={isElectron ? "Selecione o caminho de exportação" : "Sincronizado via Docker"}
+            value={
+              isElectron ? exportPath : `Pasta "outputs" na raiz do projeto`
+            }
+            placeholder={
+              isElectron
+                ? "Selecione o caminho de exportação"
+                : "Sincronizado via Docker"
+            }
             className={`
               flex-1 rounded-l-lg border
-              ${isElectron
-                ? "border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800"
-                : "border-slate-200 dark:border-slate-800 bg-slate-100/50 dark:bg-slate-900/50 italic opacity-80"
+              ${
+                isElectron
+                  ? "border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800"
+                  : "border-slate-200 dark:border-slate-800 bg-slate-100/50 dark:bg-slate-900/50 italic opacity-80"
               }
               px-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary/50 outline-none transition-all select-none`}
           />
@@ -83,11 +90,11 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({
             disabled={!isElectron}
             className={`
               flex items-center justify-center px-4 rounded-r-lg transition-colors select-none
-              ${isElectron
-                ? "bg-primary hover:bg-primary/80 text-white"
-                : "bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed"
-              }`
-            }
+              ${
+                isElectron
+                  ? "bg-primary hover:bg-primary/80 text-white"
+                  : "bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed"
+              }`}
           >
             Selecionar
           </button>

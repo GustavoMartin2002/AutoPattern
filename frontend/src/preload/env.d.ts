@@ -1,5 +1,5 @@
 // Electron API Type Definition
-import { ElectronAPI } from "./env";
+import { type ElectronAPI } from "./env";
 
 declare global {
   interface Window {

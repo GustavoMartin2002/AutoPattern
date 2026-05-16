@@ -1,6 +1,7 @@
 {
   "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
   "include": [
+    "jest.setup.ts",
     "electron.vite.config.*",
     "vite.config.*",
     "src/main/**/*",

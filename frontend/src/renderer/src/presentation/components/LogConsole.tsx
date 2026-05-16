@@ -1,6 +1,8 @@
-import React, { useEffect, useRef } from "react";
-import LogConsoleProps from "@renderer/interfaces/LogConsoleProps";
-import LogEntry from "@renderer/interfaces/LogEntry";
+import { useEffect, useRef } from "react";
+
+import type LogConsoleProps from "@renderer/interfaces/LogConsoleProps";
+import type LogEntry from "@renderer/interfaces/LogEntry";
+import type React from "react";
 
 // Componente responsável por exibir os logs
 const LogConsole: React.FC<LogConsoleProps> = ({ logs }) => {

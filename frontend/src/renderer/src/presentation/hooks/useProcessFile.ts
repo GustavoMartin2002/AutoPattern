@@ -1,6 +1,11 @@
+import {
+  connectWebSocket,
+  uploadAndProcess,
+} from "@renderer/services/ApiService";
 import { useState } from "react";
-import LogEntry from "@renderer/interfaces/LogEntry";
-import { ApiService } from "@renderer/services/ApiService";
+
+import type LogEntry from "@renderer/interfaces/LogEntry";
+import type WebSocketMessage from "@renderer/interfaces/WebSocketMessage";
 
 // Hook responsável por gerenciar o estado e a lógica do processo de upload e processamento de arquivos
 export const useProcessFile = () => {
@@ -34,7 +39,10 @@ export const useProcessFile = () => {
         const path = await window.electron.openFile();
         if (path) {
           if (!path.toLowerCase().endsWith(".xml")) {
-            addLog("error", "Formato inválido. Selecione um arquivo .xml ativo.");
+            addLog(
+              "error",
+              "Formato inválido. Selecione um arquivo .xml ativo.",
+            );
             return;
           }
           setFilePath(path);
@@ -50,9 +58,12 @@ export const useProcessFile = () => {
         setSelectedFile(webFile);
         addLog("success", `Arquivo ${webFile.name} selecionado para upload.`);
       } else {
-        addLog("warning", "API do Electron não disponível. Use o botão de upload.");
+        addLog(
+          "warning",
+          "API do Electron não disponível. Use o botão de upload.",
+        );
       }
-    } catch (err) {
+    } catch (_err) {
       addLog("error", "Falha ao selecionar arquivo.");
     }
   };
@@ -69,10 +80,13 @@ export const useProcessFile = () => {
         }
       } else {
         // Metodo suportado via navegadores no Web Mode
-        addLog("warning", "API do Electron não disponível na pré-visualização web.");
+        addLog(
+          "warning",
+          "API do Electron não disponível na pré-visualização web.",
+        );
         setExportPath("C:\\Fake\\Export\\Folder");
       }
-    } catch (err) {
+    } catch (_err) {
       addLog("error", "Falha ao selecionar diretório de destino.");
     }
   };
@@ -80,8 +94,11 @@ export const useProcessFile = () => {
   // Função responsável por executar o processamento do arquivo
   const handleExecute = async () => {
     // Validação de arquivo
-    if (!filePath || !filePath.toLowerCase().endsWith(".xml")) {
-      addLog("error", "Arquivo ausente ou inválido. Selecione um .xml primeiro.");
+    if (!filePath.toLowerCase().endsWith(".xml")) {
+      addLog(
+        "error",
+        "Arquivo ausente ou inválido. Selecione um .xml primeiro.",
+      );
       return;
     }
     // Validação de limite de tags
@@ -91,7 +108,10 @@ export const useProcessFile = () => {
     }
     // Validação de formato de exportação
     if (!exportExcel && !exportPdf) {
-      addLog("error", "É obrigatório selecionar ao menos um formato (.xlsx ou .pdf).");
+      addLog(
+        "error",
+        "É obrigatório selecionar ao menos um formato (.xlsx ou .pdf).",
+      );
       return;
     }
 
@@ -108,20 +128,23 @@ export const useProcessFile = () => {
       // Carrega o buffer em binário via chamadas nativas (Electron) ou via Fallback para Desktop Web
       if (window.electron) {
         fileBuffer = await window.electron.readFile(filePath);
-        fileName = filePath.split("\\").pop() || "arquivo.xml";
+        fileName = filePath.split("\\").pop() ?? "arquivo.xml";
       } else if (selectedFile) {
         const arrayBuffer = await selectedFile.arrayBuffer();
         fileBuffer = new Uint8Array(arrayBuffer);
         fileName = selectedFile.name;
       }
 
-      if (!fileBuffer) throw new Error("Não foi possível ler o arquivo. Certifique-se de ter selecionado um arquivo válido.");
+      if (!fileBuffer)
+        throw new Error(
+          "Não foi possível ler o arquivo. Certifique-se de ter selecionado um arquivo válido.",
+        );
 
       setProgress(15);
       setStatusText("Conectando ao servidor...");
 
       // Abre canal interativo via WebSockets para escutar progresso atualizado do Backend em tempo real
-      ws = ApiService.connectWebSocket((data: any) => {
+      ws = connectWebSocket((data: WebSocketMessage) => {
         if (data.progress) setProgress(data.progress);
         if (data.message) {
           setStatusText(data.message);
@@ -133,7 +156,7 @@ export const useProcessFile = () => {
       addLog("process", "Iniciando upload e processamento no backend...");
 
       // Constrói um POST multipart/form-data restrito, validando Buffer do arquivo e Opções de parse do Backend
-      const response = await ApiService.uploadAndProcess(fileBuffer, fileName, {
+      const response = await uploadAndProcess(fileBuffer, fileName, {
         tags,
         exportExcel,
         exportPdf,
@@ -142,11 +165,11 @@ export const useProcessFile = () => {
 
       setProgress(100);
       setStatusText("Processo concluído!");
-      addLog("success", response.message || "Exportação finalizada com sucesso.");
+      addLog("success", response.message);
 
       const targetFolder = exportPath || "outputs";
       addLog("info", `Verifique a pasta ${targetFolder}`);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
 
       const errorMessage = "Falha na comunicação com o servidor.";
