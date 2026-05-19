@@ -34,10 +34,20 @@ class SecurityMiddleware(BaseHTTPMiddleware):
         },
       )
 
-    # File size validation for upload endpoints
+    # Validação de tamanho de arquivo para endpoints de upload
     if request.url.path == "/api/upload" and request.method == "POST":
       content_length = request.headers.get("content-length")
-      if content_length and int(content_length) > self.max_file_size_bytes:
+
+      # Bloqueia ataques de chunked encoding (sem tamanho definido)
+      if not content_length:
+        return JSONResponse(
+          status_code=status.HTTP_411_LENGTH_REQUIRED,
+          content={
+            "message": "O cabeçalho Content-Length é obrigatório para uploads."
+          },
+        )
+
+      if int(content_length) > self.max_file_size_bytes:
         return JSONResponse(
           status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
           content={
