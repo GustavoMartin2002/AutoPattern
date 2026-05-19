@@ -1,4 +1,5 @@
 import os
+from unittest import mock
 
 import pytest
 from fastapi.testclient import TestClient
@@ -84,6 +85,7 @@ class TestFileSizeLimits:
   """Tests for A01 - Broken Access Control (File Size)."""
 
   # @pytest.mark.skip(reason="Requires running server")
+  @mock.patch.dict(os.environ, {"MAX_FILE_SIZE_MB": "10"})
   def test_file_size_limit_enforced(self):
     """Verifica que limite de tamanho de arquivo é aplicado."""
     client = TestClient(FastAPIServer().app)
@@ -91,9 +93,11 @@ class TestFileSizeLimits:
     # Simula arquivo grande (> 10MB)
     large_content = b"x" * (11 * 1024 * 1024)
 
+    # Envia os bytes diretamente via "content" para evitar que o httpx use
+    # Transfer-Encoding: chunked e remova o cabeçalho content-length.
     response = client.post(
       "/api/upload",
-      files={"file": ("large.xml", large_content, "application/xml")},
+      content=large_content,
     )
 
     assert response.status_code == 413
@@ -103,7 +107,7 @@ class TestFileSizeLimits:
 class TestRateLimiting:
   """Tests for A01 - Broken Access Control (Rate Limiting)."""
 
-  # @pytest.mark.skip(reason="Requires running server")
+  @mock.patch.dict(os.environ, {"RATE_LIMIT_PER_MINUTE": "10"})
   def test_rate_limit_enforced(self):
     """Verifica que rate limiting é aplicado."""
     client = TestClient(FastAPIServer().app)
@@ -111,7 +115,7 @@ class TestRateLimiting:
     # Envia 15 requisições (limite é 10/min)
     responses = []
     for _ in range(15):
-      response = client.get("/api/health")
+      response = client.get("/upload")
       responses.append(response.status_code)
 
     # Algumas requisições devem ser bloqueadas
