@@ -1,0 +1,82 @@
+# AutoPattern | Build
+# Builds Electron app
+# Windows, Linux & macOS
+
+name: Build | Electron App
+
+on:
+  workflow_run:
+    workflows: ["CI | Lint & Test"]
+    types: [completed]
+    branches: [main]
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # Gate
+  # Only run if CI passed
+  gate:
+    name: CI Gate
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: CI passed — proceeding to build
+        run: echo "CI workflow completed successfully. Starting build..."
+
+  # Build Matrix
+  build:
+    name: Build (${{ matrix.os-label }})
+    runs-on: ${{ matrix.os }}
+    needs: gate
+    defaults:
+      run:
+        working-directory: frontend
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            os-label: Linux
+            build-cmd: npm run build:linux
+            artifact-pattern: "frontend/dist/*.AppImage"
+          - os: windows-latest
+            os-label: Windows
+            build-cmd: npm run build:win
+            artifact-pattern: "frontend/dist/win-unpacked/**"
+          - os: macos-latest
+            os-label: macOS
+            build-cmd: npm run build:mac
+            artifact-pattern: "frontend/dist/*.dmg"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm install --include=dev
+
+      - name: Build Electron app
+        run: ${{ matrix.build-cmd }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Upload build artifacts
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: autopattern-${{ matrix.os-label }}
+          # path: ${{ matrix.artifact-pattern }}
+      #     retention-days: 14
+      #     if-no-files-found: error
