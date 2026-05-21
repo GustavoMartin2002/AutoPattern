@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<company>
+  <name>TechCorp</name>
+  <employees>
+    <employee>
+      <name>John Doe</name>
+      <position>Developer</position>
+      <salary>75000</salary>
+    </employee>
+    <employee>
+      <name>Jane Smith</name>
+      <position>Designer</position>
+      <salary>70000</salary>
+    </employee>
+  </employees>
+  <location>
+    <city>São Paulo</city>
+    <country>Brazil</country>
+  </location>
+</company>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<library>
+  <book>
+    <title>Clean Code</title>
+    <author>Robert Martin</author>
+    <year>2008</year>
+    <isbn>978-0132350884</isbn>
+  </book>
+  <book>
+    <title>Design Patterns</title>
+    <author>Gang of Four</author>
+    <year>1994</year>
+    <isbn>978-0201633610</isbn>
+  </book>
+  <book>
+    <title>Refactoring</title>
+    <author>Martin Fowler</author>
+    <year>1999</year>
+    <isbn>978-0201485677</isbn>
+  </book>
+  <book>
+    <title>The Pragmatic Programmer</title>
+    <author>Hunt and Thomas</author>
+    <year>1999</year>
+    <isbn>978-0201616224</isbn>
+  </book>
+</library>

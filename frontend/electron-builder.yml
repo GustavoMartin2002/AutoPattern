@@ -1,0 +1,17 @@
+appId: com.autopattern
+productName: AutoPattern
+directories:
+  buildResources: resources
+files:
+  - dist/**/*
+  - package.json
+  - resources/icon.png
+mac:
+  target: dmg
+  icon: resources/icon.png
+win:
+  target: dir
+  icon: resources/icon.png
+linux:
+  target: AppImage
+  icon: resources/icon.png
