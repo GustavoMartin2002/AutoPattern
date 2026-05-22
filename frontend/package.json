@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "AutoPattern Frontend (Electron + React + Vite)",
   "author": "Gustavo Martin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GustavoMartin2002/AutoPattern.git"
+  },
   "main": "./dist/main/index.mjs",
   "scripts": {
     "format": "prettier --write .",
@@ -19,10 +23,10 @@
     "build": "npm run typecheck && electron-vite build",
     "preinstall": "npm audit --audit-level=high",
     "postinstall": "npx electron-builder install-app-deps",
-    "build:unpack": "npm run build && electron-builder --dir",
-    "build:win": "npm run build && electron-builder --win",
-    "build:mac": "electron-vite build && electron-builder --mac",
-    "build:linux": "electron-vite build && electron-builder --linux",
+    "build:unpack": "npm run build && electron-builder --dir --publish never",
+    "build:win": "npm run build && electron-builder --win --publish never",
+    "build:mac": "electron-vite build && electron-builder --mac --publish never",
+    "build:linux": "electron-vite build && electron-builder --linux --publish never",
     "test": "jest",
     "test:watch": "jest --watch"
   },
